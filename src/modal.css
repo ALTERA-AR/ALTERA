@@ -1,0 +1,68 @@
+.custom-modal .modal-dialog {
+  max-width: 100%;
+  margin: 0;
+  height: 100%;
+}
+
+.custom-modal .modal-content {
+  height: 100%;
+  border-radius: 0;
+  background-color: #f8f9fa;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.custom-modal .modal-header {
+  background-color: #161616;
+  color: white;
+  border-bottom: none;
+  border-radius: 0;
+}
+
+.custom-modal .modal-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.custom-modal .btn-close {
+  background-color: white;
+  border-radius: 50%;
+  padding: 0.5rem;
+}
+
+.custom-modal .modal-body {
+  height: calc(100% - 56px); /* Adjust for header height */
+  overflow-y: auto;
+  padding: 2rem;
+}
+
+.custom-modal .modal-product-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.custom-modal .modal-product-description {
+  font-size: 1rem;
+  color: #6c757d;
+  margin-bottom: 1rem;
+}
+
+.custom-modal .img-thumbnail {
+  border: 2px solid #343a40;
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+}
+
+.custom-modal .img-thumbnail:hover {
+  transform: scale(1.1);
+}
+
+.custom-modal .btn-dark {
+  background-color: #343a40;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.custom-modal .btn-dark:hover {
+  background-color: #495057;
+}
