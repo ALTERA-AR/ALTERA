@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ALTERA | Moda con Realidad Aumentada</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="src/styles.css">
+  <link rel="stylesheet" href="src/navbar.css">
+  <link rel="stylesheet" href="src/modal.css">
+  <style>
+    /* Quitar bordes y hover de imágenes en los modales */
+    .modal-content .img-thumbnail,
+    .modal-content .img-fluid.rounded {
+      border: none !important;
+      box-shadow: none !important;
+      transition: none !important;
+    }
+
+    .modal-content .img-thumbnail:hover,
+    .modal-content .img-fluid.rounded:hover {
+      box-shadow: none !important;
+      border: none !important;
+      transform: none !important;
+    }
+
+    .modal-content .img-fluid.rounded,
+    .modal-content .img-thumbnail {
+      width: 50% !important;
+      height: auto !important;
+      max-width: 50% !important;
+      cursor: pointer;
+    }
+
+    /* Estilo para la imagen ampliada */
+    #zoomImageModal .modal-dialog {
+      max-width: 90vw;
+    }
+
+    #zoomImageModal .modal-body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: transparent !important;
+    }
+
+    #zoomImageModal img {
+      max-width: 90vw;
+      max-height: 94vh;
+      width: auto;
+      height: auto;
+      border: none;
+      box-shadow: none;
+      background: transparent;
+    }
+
+    /* Fondo borroso y oscuro para el modal de zoom */
+    #zoomImageModal::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      pointer-events: none;
+    }
+
+    /* Eliminar el fondo borroso y oscuro solo debajo del botón de cerrar */
+    #zoomImageModal .btn-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.85) !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      width: 40px;
+      height: 40px;
+      opacity: 1;
+    }
+
+    /* Personalizar la X del botón de cerrar */
+    #zoomImageModal .btn-close.custom-x {
+      background: rgba(255, 255, 255, 0.85) !important;
+      font-size: 2rem;
+      opacity: 1;
+    }
+
+    #zoomImageModal .btn-close.custom-x::before {
+      content: '×';
+      display: block;
+      font-size: 2rem;
+      line-height: 38px;
+      color: #222;
+      font-weight: bold;
+      text-align: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    #zoomImageModal .btn-close.custom-x::after {
+      content: '';
+    }
+
+    #zoomImageModal .btn-close.custom-x>* {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-light custom-navbar" 
+  style="position: absolute; top: 0; left: 0; width: 100%; z-index: 10;">
+  <div class="container">
+    <a href="index.html">
+      <img src="src/media/Logo-_1_.png"
+        style="height: 40px; filter: brightness(0) invert(1); margin-left: 0; margin-top: 8px;">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav ms-auto text-end">
+        <li class="nav-item"><a class="nav-link" href="#novedades">Novedades</a></li>
+        <li class="nav-item"><a class="nav-link" href="#colecciones">Colecciones</a></li>
+        <li class="nav-item"><a class="nav-link" href="#nosotros">Nosotros</a></li>
+        <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+ 
+
+  <!-- HERO SECTION -->
+  <header class="hero text-center py-5"
+    style="background-image: url('src/media/Front_Using_M_2_Mochup_Snake.png'); height: 635px; background-size: cover; background-position: top center; position: relative;">
+    <div
+      style="background-color: rgba(0, 0, 0, 0.632); position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+    </div>
+    <div class="container text-white d-flex flex-column justify-content-center align-items-center"
+      style="position: relative; height: 100%;">
+      <h1 class="display-4 fw-bold">Descubre la moda con tecnología</h1>
+      <p class="lead">Altera tu realidad, descubre ALTERA</p>
+      <a href="#colecciones" class="btn btn-dark btn-lg mt-3">Ver colección</a>
+    </div>
+  </header>
+
+  <!-- DESTACADOS -->
+  <section class="bg-white" id="novedades" style="padding-top: 2.4rem; padding-bottom: 2.4rem;">
+    <style>
+      /* Reducimos padding top y bottom un 20% (3rem → 2.4rem) */
+      #novedades {
+        padding-top: 2.4rem;
+        padding-bottom: 2.4rem;
+        font-size: 0.9rem;
+        /* Reducimos tamaño de texto un 10% aprox para mantener proporción */
+      }
+
+      /* Reducir altura y mantener proporción para video */
+      #novedades video {
+        max-height: 500px;
+        /* 270px menos 20% */
+        width: 100%;
+        object-fit: cover;
+        border-radius: 0.375rem;
+        /* mantengo el rounded de bootstrap */
+        display: block;
+      }
+
+      /* Ajustar altura del bloque grande horizontal */
+      #novedades .col-12 img {
+        max-height: 270px;
+        /* Cambia este valor para ajustar altura */
+        width: 100%;
+        object-fit: cover;
+      }
+
+      /* Para las imágenes pequeñas, opcional reducir un poco (ejemplo 10%) */
+      #novedades .col-md-6 img {
+        max-height: 222px;
+        /* si quieres ajustar más, dime */
+        width: 100%;
+        object-fit: cover;
+      }
+    </style>
+
+    <div class="container" style="color: #000;">
+      <h2 class="mb-4">Novedades</h2>
+      <div class="row g-3">
+
+
+        <!-- Bloque grande izquierda -->
+        <div class="col-md-4">
+          <div class="card h-100 border-0">
+            <video src="src/media/video1.mp4" autoplay loop muted playsinline
+              aria-label="Video de Camisa Cyber Wave"></video>
+          </div>
+        </div>
+
+        <!-- Bloques apilados derecha -->
+        <div class="col-md-8">
+          <div class="row g-2">
+            <!-- Bloque grande horizontal reducido en altura -->
+            <div class="col-12">
+              <div class="card border-0">
+                <img src="src/media/Front_Using_F_1_Mockup_Frog.png" alt="Producto grande">
+              </div>
+            </div>
+            <!-- Dos cuadrados abajo -->
+            <div class="col-md-6">
+              <div class="card border-0">
+                <img src="src/media/Front_Using_M_1_1Mockup.png" alt="Producto 2">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card border-0">
+                <img src="src/media/Back_Using_M_1_Mockup.png" alt="Producto 2">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+
+
+
+  <!-- COLECCIONES -->
+  <section class="py-5" id="colecciones" style="min-height: 100vh; background-color: #c5c5c5;">
+    <div class="card text-dark" style="width: 100%; height: 100%; background-color: #c5c5c5; border: none;">
+      <div class="card-body d-flex flex-column justify-content-center" style="flex: 1;">
+        <div class="container" style="color: #000;">
+          <h2 class="mb-4 text-start">Colecciones</h2>
+          <div class="row g-4">
+
+            <!-- Snake -->
+            <div class="col-md-4">
+              <a href="#" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#cyberWaveModal">
+                <video src="src/media/snake_bkg.mkv" class="img-fluid rounded collection-video" preload="metadata"
+                  muted></video>
+                <h5 class="mt-2 text-start" style="color: #000;">Snake</h5>
+                <p class="mb-0 text-start" style="color: #000;">Tshirt, Animal Collection</p>
+                <p class="text-start" style="color: #000;">$369.00</p>
+              </a>
+            </div>
+
+            <!-- Frog -->
+            <div class="col-md-4">
+              <a href="#" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#glitchModal">
+                <video src="src/media/Rana_bkg.mkv" class="img-fluid rounded collection-video" preload="metadata"
+                  muted></video>
+                <h5 class="mt-2 text-start" style="color: #000;">Frog</h5>
+                <p class="mb-0 text-start" style="color: #000;">Tshirt, Animal Collection</p>
+                <p class="text-start" style="color: #000;">$369.00</p>
+              </a>
+            </div>
+
+            <!-- Jellyfish -->
+            <div class="col-md-4">
+              <a href="#" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#neoModal">
+                <video src="src/media/jelly_bkg.mkv" class="img-fluid rounded collection-video" preload="metadata"
+                  muted></video>
+                <h5 class="mt-2 text-start" style="color: #000;">Jellyfish</h5>
+                <p class="mb-0 text-start" style="color: #000;">Tshirt, Animal Collection</p>
+                <p class="text-start" style="color: #000;">$369.00</p>
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    document.querySelectorAll('.collection-video').forEach(video => {
+      video.addEventListener('mouseenter', () => {
+        // Si está pausado o terminó, reinicia y reproduce
+        if (video.paused || video.ended) {
+          video.currentTime = 0;
+          video.play();
+        }
+      });
+
+      video.addEventListener('ended', () => {
+        // Cuando termina, vuelve al inicio y pausa para esperar próximo hover
+        video.pause();
+        video.currentTime = 0;
+      });
+
+      // No pausamos al quitar el mouse, para que siga
+    });
+  </script>
+
+
+
+
+  <!-- MODALS -->
+  <!-- Snake Modal -->
+  <style>
+    /* Estilo para el botón activo */
+    .color-btn.active {
+      background-color: #000;
+      color: #fff;
+      border-color: #000;
+    }
+  </style>
+  <div class="modal fade custom-modal" id="cyberWaveModal" tabindex="-1" aria-labelledby="cyberWaveModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header border-0">
+          <img src="src/media/Logo-_1_.png" alt="Snake" style="height: 40px; filter: brightness(0) invert(1);">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="d-flex flex-column align-items-center">
+                <img id="snake-main-image" src="src/media/Serpiente/Blanca/Blanca_Front.png"
+                  class="img-fluid rounded mb-3 zoomable" alt="Snake">
+                <img id="snake-thumbnail-1" src="src/media/Serpiente/Blanca/Blanca_Back.png"
+                  class="img-thumbnail mb-3 zoomable" alt="Snake - Vista 1">
+                <img id="snake-thumbnail-2" src="src/media/Close-Up/Blanca.png" class="img-thumbnail zoomable"
+                  alt="Snake - Vista 2">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <h2 class="modal-product-title">Snake</h2>
+              <p class="modal-product-description">
+                El estilo callejero con actitud. Snake mezcla gráficos potentes con una vibra rebelde que no pasa
+                desapercibida. Ponte esta y haz que la calle sea tu pasarela.
+              </p>
+              <p><strong>Gramaje:</strong> 180g</p>
+              <p><strong>Colores:</strong></p>
+              <div class="d-flex gap-2">
+                <button class="btn btn-outline-dark color-btn active" data-color="white"
+                  data-main="src/media/Serpiente/Blanca/Blanca_Front.png"
+                  data-thumb1="src/media/Serpiente/Blanca/Blanca_Back.png"
+                  data-thumb2="src/media/Close-Up/Blanca.png">Blanco</button>
+                <button class="btn btn-outline-dark color-btn" data-color="black"
+                  data-main="src/media/Serpiente/Negra/Negra_Front.png"
+                  data-thumb1="src/media/Serpiente/Negra/Negra_Back.png"
+                  data-thumb2="src/media/Close-Up/Negra.png">Negro</button>
+                <button class="btn btn-outline-dark color-btn" data-color="bone"
+                  data-main="src/media/Serpiente/Hueso/Hueso_Front.png"
+                  data-thumb1="src/media/Serpiente/Hueso/Hueso_Back.png"
+                  data-thumb2="src/media/Close-Up/Hueso.png">Hueso</button>
+              </div>
+              <p class="mt-3"><strong>Tallas:</strong> S, M, L, XL</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Frog Modal -->
+  <div class="modal fade custom-modal" id="glitchModal" tabindex="-1" aria-labelledby="glitchModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header border-0">
+          <img src="src/media/Logo-_1_.png" alt="Snake" style="height: 40px; filter: brightness(0) invert(1);">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="d-flex flex-column align-items-center">
+                <img id="frog-main-image" src="src/media/Rana/Blanca/Blanca_Front.png"
+                  class="img-fluid rounded mb-3 zoomable" alt="Frog">
+                <img id="frog-thumbnail-1" src="src/media/Rana/Blanca/Blanca_Black.png"
+                  class="img-thumbnail mb-3 zoomable" alt="Frog - Vista 1">
+                <img id="frog-thumbnail-2" src="src/media/Close-Up/Blanca.png" class="img-thumbnail zoomable"
+                  alt="Frog - Vista 2">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <h2 class="modal-product-title">Frog</h2>
+              <p class="modal-product-description">
+                Fresca, divertida y con flow. Frog es para los que viven sin prisas pero con estilo. Perfecta para días
+                de skate, conciertos o simplemente salir a romperla.
+              </p>
+              <p><strong>Gramaje:</strong> 180g</p>
+              <p><strong>Colores:</strong></p>
+              <div class="d-flex gap-2">
+                <button class="btn btn-outline-dark color-btn active" data-color="white"
+                  data-main="src/media/Rana/Blanca/Blanca_Front.png" data-thumb1="src/media/Rana/Blanca/Blanca_Back.png"
+                  data-thumb2="src/media/Close-Up/Blanca.png">Blanco</button>
+                <button class="btn btn-outline-dark color-btn" data-color="black"
+                  data-main="src/media/Rana/Negra/Negra_Front.png" data-thumb1="src/media/Rana/Negra/Negra_Back.png"
+                  data-thumb2="src/media/Close-Up/Negra.png">Negro</button>
+                <button class="btn btn-outline-dark color-btn" data-color="bone"
+                  data-main="src/media/Rana/Hueso/Hueso_Front.png" data-thumb1="src/media/Rana/Hueso/Hueso_Back.png"
+                  data-thumb2="src/media/Close-Up/Hueso.png">Hueso</button>
+              </div>
+              <p class="mt-3"><strong>Tallas:</strong> S, M, L, XL</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Jellyfish Modal -->
+  <div class="modal fade custom-modal" id="neoModal" tabindex="-1" aria-labelledby="neoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header border-0">
+          <img src="src/media/Logo-_1_.png" alt="Snake" style="height: 40px; filter: brightness(0) invert(1);">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="d-flex flex-column align-items-center">
+                <img id="jellyfish-main-image" src="src/media/Medusa/Blanca/Blanca_Front.png"
+                  class="img-fluid rounded mb-3 zoomable" alt="Jellyfish">
+                <img id="jellyfish-thumbnail-1" src="src/media/Medusa/Blanca/Blanca_Back.png"
+                  class="img-thumbnail mb-3 zoomable" alt="Jellyfish - Vista 1">
+                <img id="jellyfish-thumbnail-2" src="src/media/Close-Up/Blanca.png" class="img-thumbnail zoomable"
+                  alt="Jellyfish - Vista 2">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <h2 class="modal-product-title">Jellyfish</h2>
+              <p class="modal-product-description">
+                Movimiento y energía en cada paso. Jellyfish trae ese toque de arte callejero con un diseño que fluye
+                como la música en tus audífonos.
+              </p>
+              <p><strong>Gramaje:</strong> 180g</p>
+              <p><strong>Colores:</strong></p>
+              <div class="d-flex gap-2">
+                <button class="btn btn-outline-dark color-btn active" data-color="white"
+                  data-main="src/media/Medusa/Blanca/Blanca_Front.png"
+                  data-thumb1="src/media/Medusa/Blanca/Blanca_Back.png"
+                  data-thumb2="src/media/Close-Up/Blanca.png">Blanco</button>
+                <button class="btn btn-outline-dark color-btn" data-color="black"
+                  data-main="src/media/Medusa/Negra/Negra_Front.png" data-thumb1="src/media/Medusa/Negra/Negra_Back.png"
+                  data-thumb2="src/media/Close-Up/Negra.png">Negro</button>
+                <button class="btn btn-outline-dark color-btn" data-color="bone"
+                  data-main="src/media/Medusa/Hueso/Hueso_Front.png" data-thumb1="src/media/Medusa/Hueso/Hueso_Back.png"
+                  data-thumb2="src/media/Close-Up/Hueso.png">Hueso</button>
+              </div>
+              <p class="mt-3"><strong>Tallas:</strong> S, M, L, XL</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.color-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        const parent = button.closest('.d-flex');
+        parent.querySelectorAll('.color-btn').forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+      });
+    });
+  </script>
+
+
+  <!-- Modal para zoom de imagen -->
+  <div class="modal fade" id="zoomImageModal" tabindex="-1" aria-labelledby="zoomImageModalLabel" aria-hidden="true"
+    data-bs-keyboard="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-transparent border-0 shadow-none position-relative">
+        <button type="button" class="btn-close custom-x" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-body p-0 m-0">
+          <img id="zoomed-img" src="" alt="Imagen ampliada">
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <style>
+    .cliente-card p {
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .cliente-card strong {
+      font-size: 0.75rem;
+      color: #555;
+    }
+  </style>
+
+  <style>
+    .cliente-card p {
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .cliente-card strong {
+      font-size: 0.75rem;
+      color: #555;
+    }
+  </style>
+
+  <style>
+    .cliente-card p {
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .cliente-card strong {
+      font-size: 0.75rem;
+      color: #555;
+    }
+  </style>
+
+  <style>
+    .cliente-card p {
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .cliente-card strong {
+      font-size: 0.75rem;
+      color: #555;
+    }
+  </style>
+
+  <style>
+    .cliente-card {
+      text-align: center;
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+
+    .cliente-card p {
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .cliente-card strong {
+      font-size: 0.75rem;
+      color: #555;
+      display: block;
+      margin-top: 0.3rem;
+    }
+  </style>
+
+  <!-- TESTIMONIOS -->
+  <section class="py-5 bg-light" id="clientes">
+    <div class="container text-center">
+      <h2 class="mb-4">Clientes</h2>
+      <div class="overflow-hidden">
+        <div class="clientes-row clientes-row-1 d-flex flex-nowrap mb-4">
+
+          <div class="cliente-card flex-shrink-0 mx-2">
+            <p>Nunca pensé que una camiseta pudiera sorprenderme tanto.<br>¡La realidad aumentada está
+              brutal!<br><strong>- Laura M.</strong></p>
+          </div>
+
+          <div class="cliente-card flex-shrink-0 mx-2">
+            <p>Me encanta cómo mis diseños favoritos cobran vida.<br>Ya no es solo ropa, es experiencia.<br><strong>-
+                Carlos G.</strong></p>
+          </div>
+
+          <div class="cliente-card flex-shrink-0 mx-2">
+            <p>La calidad es top y el efecto 3D alucinante.<br>Todos me preguntan dónde la compré.<br><strong>- Sofía
+                R.</strong></p>
+          </div>
+
+          <div class="cliente-card flex-shrink-0 mx-2">
+            <p>¡Wow! La primera vez que probé la app con la camiseta,<br>no podía creer lo cool que se
+              veía.<br><strong>- Diego L.</strong></p>
+          </div>
+
+          <div class="cliente-card flex-shrink-0 mx-2">
+            <p>Ropa cómoda y a la vez súper techie.<br>Me siento como si llevara algo salido del futuro.<br><strong>-
+                Ana P.</strong></p>
+          </div>
+
+          <!-- Duplicados para bucle -->
+          <div class="cliente-card flex-shrink-0 mx-2">
+            <p>Una mezcla perfecta entre moda y tecnología.<br>No puedo dejar de recomendarla.<br><strong>- Javier
+                T.</strong></p>
+          </div>
+
+          <div class="cliente-card flex-shrink-0 mx-2">
+            <p>El diseño es increíble y la interacción con realidad aumentada me flipa.<br>¡Muy original!<br><strong>-
+                Mariana S.</strong></p>
+          </div>
+
+          <div class="cliente-card flex-shrink-0 mx-2">
+            <p>Me siento único usando esta ropa,<br>es como llevar arte digital encima.<br><strong>- Luis F.</strong>
+            </p>
+          </div>
+
+          <div class="cliente-card flex-shrink-0 mx-2">
+            <p>Es una experiencia diferente, nada que ver con cualquier camiseta común.<br>Súper
+              recomendado.<br><strong>- Valentina C.</strong></p>
+          </div>
+
+          <div class="cliente-card flex-shrink-0 mx-2">
+            <p>De mis compras favoritas.<br>No solo se ve bien, sino que también entretiene y sorprende.<br><strong>-
+                Pedro H.</strong></p>
+          </div>
+
+        </div>
+
+        <div class="clientes-row clientes-row-2 d-flex flex-nowrap mb-4">
+
+          <!-- Puedes repetir o poner más testimonios -->
+
+          <div class="cliente-card flex-shrink-0 mx-2">
+            <p>Nunca pensé que una camiseta pudiera sorprenderme tanto.<br>¡La realidad aumentada está
+              brutal!<br><strong>- Laura M.</strong></p>
+          </div>
+
+          <div class="cliente-card flex-shrink-0 mx-2">
+            <p>Me encanta cómo mis diseños favoritos cobran vida.<br>Ya no es solo ropa, es experiencia.<br><strong>-
+                Carlos G.</strong></p>
+          </div>
+
+          <div class="cliente-card flex-shrink-0 mx-2">
+            <p>La calidad es top y el efecto 3D alucinante.<br>Todos me preguntan dónde la compré.<br><strong>- Sofía
+                R.</strong></p>
+          </div>
+
+          <div class="cliente-card flex-shrink-0 mx-2">
+            <p>¡Wow! La primera vez que probé la app con la camiseta,<br>no podía creer lo cool que se
+              veía.<br><strong>- Diego L.</strong></p>
+          </div>
+
+          <div class="cliente-card flex-shrink-0 mx-2">
+            <p>Ropa cómoda y a la vez súper techie.<br>Me siento como si llevara algo salido del futuro.<br><strong>-
+                Ana P.</strong></p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+
+
+  <!-- SOBRE NOSOTROS -->
+  <section class="py-5" id="nosotros">
+    <div class="container text-center">
+      <h2 class="mb-4">Sobre Nosotros</h2>
+      <p class="lead">En ALTERA, combinamos moda y tecnología para ofrecerte una experiencia única e innovadora. Nuestro
+        compromiso es brindarte productos de la más alta calidad, con diseños exclusivos que realzan tu estilo personal.
+      </p>
+      <a href="https://www.instagram.com/altera.ar/" target="_blank" class="btn btn-dark btn-lg mt-3">
+        Conoce más
+      </a>
+    </div>
+  </section>
+
+
+  <!-- CONTACTO -->
+  <section class="py-5">
+    <div class="container text-center" id="contacto">
+      <h2 class="mb-4">Contacto</h2>
+      <p class="lead">¿Tienes alguna pregunta o comentario? ¡Nos encantaría saber de ti! Ponte en contacto con nosotros
+        a través de instagram</p>
+      <a href="https://www.instagram.com/altera.ar/" target="_blank" class="btn btn-dark btn-lg mt-3">
+        Conoce más
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="py-4 bg-dark text-white" id="footer">
+    <div class="container text-center">
+      <p class="mb-0">&copy; 2025 ALTERA. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="src/navbar.js"></script>
+  <script src="src/modal.js"></script>
+  <script>
+    // Zoom de imagen en modales
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('.zoomable').forEach(function (img) {
+        img.addEventListener('click', function () {
+          var zoomModal = new bootstrap.Modal(document.getElementById('zoomImageModal'));
+          document.getElementById('zoomed-img').src = img.src;
+          zoomModal.show();
+        });
+      });
+      // Limpiar imagen al cerrar el modal
+      document.getElementById('zoomImageModal').addEventListener('hidden.bs.modal', function () {
+        document.getElementById('zoomed-img').src = '';
+      });
+    });
+  </script>
+</body>
+
+</html>
