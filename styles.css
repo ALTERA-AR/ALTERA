@@ -1,0 +1,135 @@
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+.hero {
+  background: linear-gradient(135deg, #f8fafc 60%, #d1c4e9 100%);
+  padding: 80px 0;
+  position: relative;
+}
+
+#novedades .container {
+  color: #000;
+}
+
+#footer {
+  background-color: #000 !important; /* negro puro */
+  color: #fff !important; /* texto blanco */
+}
+
+
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.603);
+  z-index: -1;
+}
+
+h1, h2, h5 {
+  font-weight: 600;
+}
+
+.btn-dark {
+  border-radius: 30px;
+  background-color: #000;
+  
+}
+
+img, video {
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+}
+
+img:hover, video:hover {
+  transform: scale(1.05);
+}
+
+section.py-5.bg-light h2 {
+  margin-bottom: 1rem;
+}
+
+section.py-5.bg-light .row.g-4 .col-md-4 h5 {
+  margin-top: 0.5rem;
+}
+
+/* Clientes animados horizontalmente */
+.cliente-card {
+  background: rgba(0,0,0,0.7);
+  color: #fff;
+  border: 2px solid #fff;
+  border-radius: 16px;
+  min-width: 220px;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+#nosotros, #contacto {
+  height: 100vh; /* altura igual a la ventana del navegador */
+  display: flex; /* para centrar contenido opcional */
+  flex-direction: column;
+  justify-content: center; /* centra verticalmente */
+  align-items: center;     /* centra horizontalmente */
+  padding: 20px; /* espacio interno para que el contenido no quede pegado */
+  box-sizing: border-box; /* para que el padding no aumente el tamaño */
+}
+
+
+#clientes {
+  background: #000 !important;
+  color: #fff ;
+}
+
+#clientes .clientes-row {
+  display: flex;
+  width: 100%;
+  will-change: transform;
+}
+
+#clientes .clientes-row-1 {
+  animation: clientes-left 18s linear infinite;
+}
+
+#clientes .clientes-row-2 {
+  animation: clientes-right 18s linear infinite;
+}
+
+.clientes-row {
+  width: 100%t;
+  will-change: transform;
+}
+
+.clientes-row-1 {
+  animation: clientes-left 18s linear infinite;
+}
+
+.clientes-row-2 {
+  animation: clientes-right 18s linear infinite;
+}
+
+@keyframes clientes-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes clientes-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+#clientes .overflow-hidden {
+  overflow-x: hidden;
+  padding-bottom: 1rem;
+}
